@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>On Save</string>
+	<key>description</key>
+	<string>Removes trailing white space from a file after saving and adds a new line to the end of a file before saving if none exists.</string>
+	<key>contactName</key>
+	<string>Markus Reiter</string>
+	<key>contactEmailRot13</key>
+	<string>zr@ervgreznex.hf</string>
+	<key>mainMenu</key>
+	<dict>
+		<key>excludedItems</key>
+		<array>
+			<string>4B145342-1E44-4B8B-8E28-4F7E1458F546</string>
+			<string>2B557F82-75F1-4FB0-B954-CAC3AB8FD574</string>
+		</array>
+	</dict>
+	<key>source</key>
+	<dict>
+		<key>url</key>
+		<string>git@github.com:reitermarkus/on-save.tmbundle</string>
+		<key>method</key>
+		<string>git</string>
+	</dict>
+	<key>uuid</key>
+	<string>74BB950F-06E8-4D6E-B061-1C3A0D9114B9</string>
+</dict>
+</plist>
