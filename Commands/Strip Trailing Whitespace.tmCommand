@@ -5,11 +5,18 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby20
+	<string>#!/usr/bin/env ruby20 -wKU
 
 content = STDIN.read
 
-content.gsub! /(?&lt;!\\)[\t ]+$/, ''
+if ENV["TM_SCOPE"].include? "text.html.markdown"
+  # Leave whitespace-only lines alone to preserve indentation, remove trailing whitespace except two to preserve line breaks, also remove single trailing whitespace characters as these don't trigger line breaks.
+  content.gsub! /(?&lt;=[^\s][\t ]{2})[\t ]+$/, ''
+  content.gsub! /(?&lt;=[^\s])[\t ]$/, ''
+else
+  # Remove trailing whitespace except one when there is an escaped whitespace character.
+  content.gsub! /(?&lt;!\\)[\t ]+$/, ''
+end
 
 print content
 </string>
@@ -25,10 +32,8 @@ print content
 	<string>text</string>
 	<key>outputLocation</key>
 	<string>replaceDocument</string>
-	<key>scope</key>
-	<string>* -text.html.markdown -source.yaml</string>
 	<key>semanticClass</key>
-	<string>callback.document.export</string>
+	<string>callback.document.will-save</string>
 	<key>uuid</key>
 	<string>4B145342-1E44-4B8B-8E28-4F7E1458F546</string>
 	<key>version</key>
