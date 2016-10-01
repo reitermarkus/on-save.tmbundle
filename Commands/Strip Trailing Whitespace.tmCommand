@@ -7,18 +7,35 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby20 -w -U
 
-content = STDIN.read
+TM_SCOPE = ENV['TM_SCOPE'].split(' ')
 
-if ENV["TM_SCOPE"].include? "text.html.markdown"
-  # Leave whitespace-only lines to preserve indentation, remove trailing whitespace characters except the last two to preserve line breaks, and remove single trailing whitespace characters as these don't trigger line breaks.
-  content.gsub! /(?&lt;=[^\s][\t ]{2})[\t ]+$/, ''
-  content.gsub! /(?&lt;=[^\s])[\t ]$/, ''
-else
-  # Remove trailing whitespace characters except the last when there is an escaped whitespace character at the end of the line.
-  content.gsub! /(?&lt;!\\)[\t ]+$/, ''
+def markdown?
+  return @markdown if instance_variable_defined?(:@markdown)
+  @markdown = TM_SCOPE.include?('text.html.markdown')    
 end
 
-print content
+STDIN.each_line do |line|
+  if markdown?
+    # Leave escaped whitespace character at the end of the line, and remove
+    # trailing whitespace characters, except for two if there was an escaped 
+    # whitespace character followed by at least two whitespace characters.
+    line.sub!(/((?&lt;=\\[\t\ ])[\t ]|(?&lt;=\\[\t\ ]{3})[\t ]+)$/, '')
+    
+    # Remove trailing whitespace characters, except for two to preserve line breaks,
+    # and leave whitespace-only lines to preserve indentation.
+    line.sub!(/(?&lt;=[^\\\t \ ][\t ]{2})[\t ]+$/, '')
+    
+    # Remove single trailing whitespace characters ,
+    # and leave whitespace-only lines to preserve indentation.
+    line.sub!(/(?&lt;=[^\\\t \ ])[\t ]$/, '')
+  else
+    # Remove trailing whitespace characters, except for one if there  
+    # is an escaped whitespace character at the end of the line.
+    line.sub!(/(?&lt;!\\)[\t ]+$/, '')
+  end
+  
+  print line
+end
 </string>
 	<key>input</key>
 	<string>document</string>

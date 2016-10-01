@@ -9,7 +9,7 @@
 
 content = STDIN.read
 
-content &lt;&lt; "\n" unless content.gsub(/[\t ]+$/, '').end_with? "\n"
+content.concat("\n") unless content.gsub(/[\t ]+$/, '').end_with?("\n")
 
 print content
 </string>
