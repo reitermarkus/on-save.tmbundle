@@ -7,34 +7,10 @@
 	<key>command</key>
 	<string>#!/usr/bin/ruby
 
-TM_SCOPE = ENV['TM_SCOPE'].split(' ')
-
-def markdown?
-  return @markdown if instance_variable_defined?(:@markdown)
-  @markdown = TM_SCOPE.include?('text.html.markdown')    
-end
+require "#{ENV['TM_BUNDLE_SUPPORT']}/trailing_whitespace.rb"
 
 STDIN.each_line do |line|
-  if markdown?
-    # Leave escaped whitespace character at the end of the line, and remove
-    # trailing whitespace characters, except for two if there was an escaped 
-    # whitespace character followed by at least two whitespace characters.
-    line.sub!(/((?&lt;=\\[\t\ ])[\t ]|(?&lt;=\\[\t\ ]{3})[\t ]+)$/, '')
-    
-    # Remove trailing whitespace characters, except for two to preserve line breaks,
-    # and leave whitespace-only lines to preserve indentation.
-    line.sub!(/(?&lt;=[^\\\t \ ][\t ]{2})[\t ]+$/, '')
-    
-    # Remove single trailing whitespace characters ,
-    # and leave whitespace-only lines to preserve indentation.
-    line.sub!(/(?&lt;=[^\\\t \ ])[\t ]$/, '')
-  else
-    # Remove trailing whitespace characters, except for one if there  
-    # is an escaped whitespace character at the end of the line.
-    line.sub!(/(?&lt;!\\)[\t ]+$/, '')
-  end
-  
-  print line
+  print trim(line)
 end
 </string>
 	<key>input</key>
